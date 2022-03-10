@@ -3,11 +3,18 @@ import './Header.scss';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import CartIcon from '../CartIcon/CartIcon';
+import { clearCart,toggleCartHidden } from '../../redux/cart/cart.action';
 import CartDropdown from '../CartDropdown/CartDropdown.component';
 import {auth} from '../../firebase/firebase.util'
 import {ReactComponent as Logo} from '../../assets/crown.svg'
 
-const Headers = ({currentUser,hidden}) => {
+const Headers = ({currentUser,hidden,clearCart,toggleCartHidden}) => {
+
+    const signOut = () => {
+        auth.signOut();
+        clearCart();
+        if(!hidden) toggleCartHidden();
+    }
     return (
         <div className='header'>
             <Link to="/">
@@ -22,7 +29,7 @@ const Headers = ({currentUser,hidden}) => {
                 </Link>
                 {
                     currentUser ? 
-                    <div className='option' onClick={()=>auth.signOut()}>
+                    <div className='option' onClick={()=>signOut()}>
                         SIGN OUT
                     </div> : 
                     <Link className='option' to='/signin'>
@@ -43,4 +50,9 @@ const mapStateToProps = ({user: {currentUser}, cart: {hidden}}) => ({
     hidden
 })
 
-export default connect(mapStateToProps)(Headers);
+const mapDispatchToProps = dispatch => ({
+    clearCart: () => dispatch(clearCart()),
+    toggleCartHidden: () => dispatch(toggleCartHidden())
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(Headers);

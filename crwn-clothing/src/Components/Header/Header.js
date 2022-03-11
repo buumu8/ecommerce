@@ -1,6 +1,7 @@
 import React from 'react';
-import './Header.scss';
-import {Link} from 'react-router-dom';
+// import './Header.scss';
+import {HeaderContainer,LogoContainer,OptionsContainer,OptionLink} from './Header.styles'
+// import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect';
 import CartIcon from '../CartIcon/CartIcon';
@@ -19,32 +20,32 @@ const Headers = ({currentUser,hidden,clearCart,toggleCartHidden}) => {
         if(!hidden) toggleCartHidden();
     }
     return (
-        <div className='header'>
-            <Link to="/">
-                <Logo className='logo' />
-            </Link>
-            <div className='options'>
-                <Link className='option' to='/shop'>
+        <HeaderContainer>
+            <LogoContainer to="/">
+                <Logo className='logo'/>
+            </LogoContainer>
+            <OptionsContainer>
+                <OptionLink to='/shop'>
                     SHOP
-                </Link>
-                <Link className='option' to='/contact'>
+                </OptionLink>
+                <OptionLink to='/contact'>
                     CONTACT
-                </Link>
+                </OptionLink>
                 {
                     currentUser ? 
-                    <div className='option' onClick={()=>signOut()}>
+                    <OptionLink as='div' onClick={()=>signOut()}>
                         SIGN OUT
-                    </div> : 
-                    <Link className='option' to='/signin'>
+                    </OptionLink> : 
+                    <OptionLink to='/signin'>
                         SIGN IN
-                    </Link>
+                    </OptionLink>
                 }
                 <CartIcon />
-            </div>
+            </OptionsContainer>
             {
                 hidden? null : <CartDropdown />
             }
-        </div>
+        </HeaderContainer>
     )
 }
 

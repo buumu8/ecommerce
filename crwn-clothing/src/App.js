@@ -12,6 +12,7 @@ import SigninAndSignuppage from './Pages/SigninAndSignuppage/SigninAndSignuppage
 import {auth,createUserProfileDocument} from './firebase/firebase.util'
 import { setCurrentUser } from './redux/user/user.action';
 import { selectCurrentUser } from './redux/user/user.selectors';
+// import { selectCollectionsForPreview } from './redux/shop/shop.selector';
 import './App.css';
 
 class App extends React.Component {
@@ -32,6 +33,7 @@ class App extends React.Component {
        });
       }
       setCurrentUser(userAuth);
+      // addCollectionAndDocuments('collections',collectionArray.map(({title,items}) => ({title,items})));
     })
   }
 

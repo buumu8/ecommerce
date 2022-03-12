@@ -6,7 +6,7 @@ import { MenuItemContainer,BackgroundImageContainer,MenuContentContainer,
     MenuTitleContainer,MenuSubtitleContainer } from './MenuItem.styles';
 
 const MenuItem = ({id,title,imageUrl,size,history, linkUrl, match}) => {
-    console.log(match);
+    // console.log(match);
     return (
     <MenuItemContainer size={size}
         onClick={()=>history.push(`${match.url}shop/${title}`)}

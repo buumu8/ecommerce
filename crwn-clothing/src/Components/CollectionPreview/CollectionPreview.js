@@ -1,12 +1,19 @@
 import React from 'react';
 
+import { Link,withRouter } from 'react-router-dom';
+
 import './CollectionPreview.scss';
 import CollectionItem from '../CollectionItem/CollectionItem';
 
-const CollectionPreview = ({ title,items }) => {
+const CollectionPreview = ({ title,items,match}) => {
+
     return (
         <div className='collection-preview'>
-            <h1>{title.toUpperCase()}</h1>
+            <Link className='title' 
+                to={`${match.path}/${title.toLowerCase()}`}
+                >
+                {title.toUpperCase()}
+            </Link>
             <div className='preview'>
                 {
                     items.filter((item,index)=>index < 4)
@@ -19,4 +26,4 @@ const CollectionPreview = ({ title,items }) => {
     )
 }
 
-export default CollectionPreview;
+export default withRouter(CollectionPreview);

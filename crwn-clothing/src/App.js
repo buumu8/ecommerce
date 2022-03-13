@@ -1,7 +1,7 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import {createStructuredSelector} from 'reselect';
-import {connect} from 'react-redux';
+
+import {useSelector, useDispatch} from 'react-redux';
 
 import Homepage from './Pages/Homepage/Homepage';
 import Shoppage from './Pages/Shoppage/Shoppage';
@@ -17,20 +17,15 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
-class App extends React.Component {
-  unsubscribeFromAuth = null
+const App = () => {
+  const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
-  componentDidMount(){
-    const {checkUserSession} = this.props;
-    checkUserSession();
-  }
+  useEffect(()=>{
+    dispatch(checkUserSession());
+  },[dispatch]);
 
-  componentWillUnmount(){
-    this.unsubscribeFromAuth();
-  }
-
-  render(){
-    return (
+  return (
       <div>
         <Header />
         <Switch>
@@ -39,7 +34,7 @@ class App extends React.Component {
           <Route exact path='/checkout' component={CheckoutPage} />
           <Route exact path='/signin' 
             render={()=>
-              this.props.currentUser ? 
+              currentUser ? 
               (<Redirect to='/' />) : 
               (<SigninAndSignuppage />)} />
           
@@ -48,14 +43,5 @@ class App extends React.Component {
       </div>
     );
   }
-}
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
-})
-
-const mapDispatchToProps = dispatch => ({
-  checkUserSession: () => dispatch(checkUserSession())
-})
-
-export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default App;

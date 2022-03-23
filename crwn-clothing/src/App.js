@@ -3,6 +3,8 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import ErrorBoundary from "./Components/ErrorBoundary/ErrorBoundary.component";
+
 // import Homepage from "./Pages/Homepage/Homepage";
 // import Shoppage from "./Pages/Shoppage/Shoppage";
 import Header from "./Components/Header/Header";
@@ -37,19 +39,21 @@ const App = () => {
     <div>
       <Header />
       <Switch>
-        <Suspense fallback={<Spinner />}>
-          <Route exact path="/" component={Homepage} />
+        <ErrorBoundary>
+          <Suspense fallback={<Spinner />}>
+            <Route exact path="/" component={Homepage} />
 
-          <Route path="/shop" component={Shoppage} />
-          <Route exact path="/checkout" component={CheckoutPage} />
-          <Route
-            exact
-            path="/signin"
-            render={() =>
-              currentUser ? <Redirect to="/" /> : <SigninAndSignuppage />
-            }
-          />
-        </Suspense>
+            <Route path="/shop" component={Shoppage} />
+            <Route exact path="/checkout" component={CheckoutPage} />
+            <Route
+              exact
+              path="/signin"
+              render={() =>
+                currentUser ? <Redirect to="/" /> : <SigninAndSignuppage />
+              }
+            />
+          </Suspense>
+        </ErrorBoundary>
       </Switch>
       <ToastContainer />
     </div>

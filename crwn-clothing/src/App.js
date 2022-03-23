@@ -1,47 +1,59 @@
-import React,{useEffect} from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { useEffect, lazy, Suspense } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 
-import Homepage from './Pages/Homepage/Homepage';
-import Shoppage from './Pages/Shoppage/Shoppage';
-import Header from './Components/Header/Header';
-import CheckoutPage from './Pages/Checkout/Checkout';
+// import Homepage from "./Pages/Homepage/Homepage";
+// import Shoppage from "./Pages/Shoppage/Shoppage";
+import Header from "./Components/Header/Header";
+// import CheckoutPage from "./Pages/Checkout/Checkout";
+// import SigninAndSignuppage from "./Pages/SigninAndSignuppage/SigninAndSignuppage";
 
-import SigninAndSignuppage from './Pages/SigninAndSignuppage/SigninAndSignuppage';
-import { selectCurrentUser } from './redux/user/user.selectors';
+import { Spinner } from "./Components/Spinner/Spinner.component";
+import { selectCurrentUser } from "./redux/user/user.selectors";
 
-import { checkUserSession } from './redux/user/user.action';
+import { checkUserSession } from "./redux/user/user.action";
 
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+
+const Homepage = lazy(() => import("./Pages/Homepage/Homepage"));
+const Shoppage = lazy(() => import("./Pages/Shoppage/Shoppage"));
+const SigninAndSignuppage = lazy(() =>
+  import("./Pages/SigninAndSignuppage/SigninAndSignuppage")
+);
+const CheckoutPage = lazy(() => import("./Pages/Checkout/Checkout"));
 
 const App = () => {
   const currentUser = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(checkUserSession());
-  },[dispatch]);
+  }, [dispatch]);
 
   return (
-      <div>
-        <Header />
-        <Switch>
-          <Route exact path='/' component={Homepage} />
-          <Route path='/shop' component={Shoppage} />
-          <Route exact path='/checkout' component={CheckoutPage} />
-          <Route exact path='/signin' 
-            render={()=>
-              currentUser ? 
-              (<Redirect to='/' />) : 
-              (<SigninAndSignuppage />)} />
-          
-        </Switch>
-        <ToastContainer />
-      </div>
-    );
-  }
+    <div>
+      <Header />
+      <Switch>
+        <Suspense fallback={<Spinner />}>
+          <Route exact path="/" component={Homepage} />
+
+          <Route path="/shop" component={Shoppage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
+          <Route
+            exact
+            path="/signin"
+            render={() =>
+              currentUser ? <Redirect to="/" /> : <SigninAndSignuppage />
+            }
+          />
+        </Suspense>
+      </Switch>
+      <ToastContainer />
+    </div>
+  );
+};
 
 export default App;
